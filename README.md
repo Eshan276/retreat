@@ -23,7 +23,7 @@ This Flask-based API manages retreat bookings, offering endpoints for retreat in
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/Eshan276/printmaterial_mern.git
+   git clone https://github.com/Eshan276/retreat.git
    cd retreat
    ```
 
