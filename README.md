@@ -10,7 +10,7 @@ This Flask-based API manages retreat bookings, offering endpoints for retreat in
 - PostgreSQL database integration using SQLAlchemy
 
 ## Documentaion
-- Postaman
+- Postaman  https://documenter.getpostman.com/view/30488948/2sA3kaBJUo
 
 
 ## Prerequisites
