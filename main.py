@@ -77,28 +77,67 @@ def get_retreats():
 
     query = Retreat.query
 
-    if search:
-        query = query.filter(Retreat.title.ilike(
-            f'%{search}%') | Retreat.description.ilike(f'%{search}%'))
+    if search or location or filter_param:
+        if search:
+            query = query.filter(
+                Retreat.title.ilike(f'%{search}%') |
+                Retreat.description.ilike(f'%{search}%')
+            )
 
-    if location:
-        query = query.filter(Retreat.location == location)
+        if location:
+            query = query.filter(Retreat.location == location)
 
-    if filter_param:
-        query = query.filter(Retreat.condition.ilike(f'%{filter_param}%') |
-                             Retreat.title.ilike(f'%{filter_param}%') |
-                             Retreat.description.ilike(f'%{filter_param}%') |
-                             Retreat.location.ilike(f'%{filter_param}%') |
-                             Retreat.condition.ilike(f'%{filter_param}%'))
+        if filter_param:
+            query = query.filter(
+                Retreat.condition.ilike(f'%{filter_param}%') |
+                Retreat.title.ilike(f'%{filter_param}%') |
+                Retreat.description.ilike(f'%{filter_param}%') |
+                Retreat.location.ilike(f'%{filter_param}%') |
+                Retreat.condition.ilike(f'%{filter_param}%')
+            )
 
-    retreats = query.paginate(page=page, per_page=limit, error_out=False)
+        retreats = query.paginate(page=page, per_page=limit, error_out=False)
 
-    return jsonify({
-        'retreats': [{'id': r.id, 'title': r.title, 'description': r.description, 'location': r.location, 'price': str(r.price), 'duration': r.duration, 'type': r.type, 'condition': r.condition, 'tags': r.tag, 'image': r.image} for r in retreats.items],
-        'total': retreats.total,
-        'pages': retreats.pages,
-        'current_page': page
-    })
+        return jsonify({
+            'retreats': [
+                {
+                    'id': r.id,
+                    'title': r.title,
+                    'description': r.description,
+                    'location': r.location,
+                    'price': str(r.price),
+                    'duration': r.duration,
+                    'type': r.type,
+                    'condition': r.condition,
+                    'tags': r.tag,
+                    'image': r.image
+                } for r in retreats.items
+            ],
+            'total': retreats.total,
+            'pages': retreats.pages,
+            'current_page': page
+        })
+    else:
+        # Return all retreats without pagination
+        all_retreats = query.all()
+
+        return jsonify({
+            'retreats': [
+                {
+                    'id': r.id,
+                    'title': r.title,
+                    'description': r.description,
+                    'location': r.location,
+                    'price': str(r.price),
+                    'duration': r.duration,
+                    'type': r.type,
+                    'condition': r.condition,
+                    'tags': r.tag,
+                    'image': r.image
+                } for r in all_retreats
+            ],
+            'total': len(all_retreats)
+        })
 
 
 @app.route('/book', methods=['POST'])
